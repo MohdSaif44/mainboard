@@ -185,6 +185,7 @@ void Initialize() {
 
 	/*****Motor*****/
 //	IMU_Init(&IMU, &huart2);
+//	ch0x0Init(&ch010, &huart3);
 //	PWMEncoder_Angle(&htim1, GPIOC, GPIO_PIN_0, &enc1);
 //	VESCInit(BOTTOMSHOOT, LOADING, 0, 0, &vesc);
 //
