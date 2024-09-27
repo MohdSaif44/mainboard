@@ -64,7 +64,8 @@ extern "C" {
 // #include "Dongbei/dongbei.h"
 // #include "RGB/rgb.h"
 // #include "TFmini/tfmini.h"
- #include "Faulhaber/FH.h"
+#include "Faulhaber/FH.h"
+#include "trajectory_control/traj.h"
 // #include "PixyCam2_Esp32/PixyCam2_ESP32.h"
 
 /* Exported functions prototypes ---------------------------------------------*/
