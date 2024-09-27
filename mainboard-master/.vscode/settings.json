@@ -1,0 +1,10 @@
+{
+  "files.associations": {
+    "*.sjs": "javascript",
+    "*.tyss": "css",
+    "bios.h": "c",
+    "system.h": "c",
+    "swerve.h": "c",
+    "iwdg.h": "c"
+  }
+}

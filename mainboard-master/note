@@ -1,0 +1,40 @@
+Analog 2- A1 (Kiap LL)
+Analog 3- A2 (Kiap LR)
+Analog 4- MiaoBallLeft
+
+
+IP1- A8 (Pick R)
+IP2- KRR T1C3
+IP3- KRL T1C4
+IP4- A3 (Pick L)
+IP5- KLL T12C1
+IP6- KLR T12C2
+IP7- A4 (Shoot)
+IP8- ESP
+IP9- T8C3
+IP10- MiaoBallRight
+IP11- A5 (Kiap RR)
+IP12- A6 (Kiap RL)
+IP13- A7 (Load)
+IP14- Ao 1 T3C2
+IP15- Ao 2 T4C1
+
+QEI8A- PRR
+QEI8B- PLL
+
+HSPM (5V)
+1- Miao L
+2- Miao R
+3- HRR
+4- HRL
+5- HLL
+6- HLR
+7- PLR
+8- PRL
+
+Servo Extension (12V)
+IP9,3,5,6
+
+Servo extension (8V)
+IP9,10,QEI8A, QEI8B
+

@@ -1,0 +1,278 @@
+odrv0.erase_configuration()
+
+odrv0.config.brake_resistance = 0
+odrv0.config.dc_bus_overvoltage_trip_level = 26.5
+odrv0.config.dc_bus_undervoltage_trip_level = 22.2
+odrv0.config.dc_max_positive_current = 60
+odrv0.config.dc_max_negative_current = -3
+odrv0.config.max_regen_current = 3
+
+odrv0.axis0.motor.config.pole_pairs = 7
+odrv0.axis0.motor.config.torque_constant = 8.23/270
+odrv0.axis0.motor.config.calibration_current = 5
+odrv0.axis0.motor.config.resistance_calib_max_voltage = 0.53
+odrv0.axis0.motor.config.motor_type = 0    
+odrv0.axis0.motor.config.current_lim = 10
+odrv0.axis0.motor.config.requested_current_range = 20
+odrv0.axis0.motor.config.current_control_bandwidth = 1000
+
+odrv0.axis0.encoder.config.mode = ENCODER_MODE_INCREMENTAL
+odrv0.axis0.encoder.config.cpr = 8192
+
+odrv0.axis0.encoder.config.mode = ENCODER_MODE_SPI_ABS_AMS
+odrv0.axis0.encoder.config.cpr = 2**14
+odrv0.axis0.encoder.config.abs_spi_cs_gpio_pin = 8
+
+odrv0.axis0.encoder.config.bandwidth = 1000
+odrv0.axis0.config.calibration_lockin.current = 5
+odrv0.axis0.config.calibration_lockin.ramp_time = 0.4
+odrv0.axis0.config.calibration_lockin.ramp_distance = 3.14159274
+odrv0.axis0.config.calibration_lockin.accel = 20
+odrv0.axis0.config.calibration_lockin.vel = 40
+
+odrv0.axis0.controller.config.control_mode = CONTROL_MODE_POSITION_CONTROL
+odrv0.axis0.controller.config.input_mode = INPUT_MODE_TRAP_TRAJ
+
+odrv0.axis0.trap_traj.config.vel_limit = 10
+odrv0.axis0.trap_traj.config.accel_limit = 50
+odrv0.axis0.trap_traj.config.decel_limit = 50
+
+odrv0.axis0.controller.config.input_mode = INPUT_MODE_POS_FILTER
+odrv0.axis0.controller.config.input_filter_bandwidth = 2.0
+odrv0.axis0.controller.config.control_mode = CONTROL_MODE_VELOCITY_CONTROL
+odrv0.axis0.controller.config.input_mode = INPUT_MODE_VEL_RAMP
+odrv0.axis0.controller.config.vel_ramp_rate = 10.0
+odrv0.axis0.controller.config.inertia = 0.0
+
+odrv0.axis0.controller.config.control_mode = CONTROL_MODE_TORQUE_CONTROL
+odrv0.axis0.controller.config.input_mode = INPUT_MODE_TORQUE_RAMP
+odrv0.axis0.controller.config.torque_ramp_rate = 0.1
+
+odrv0.axis0.controller.config.vel_gain = 0.1
+odrv0.axis0.controller.config.vel_integrator_gain = 0.05
+odrv0.axis0.controller.config.pos_gain = 60
+odrv0.axis0.controller.config.vel_limit = 30
+
+odrv0.axis0.encoder.config.pre_calibrated = False
+odrv0.axis0.motor.config.pre_calibrated = False
+
+
+
+odrv0.save_configuration()
+odrv0.reboot()
+
+odrv0.axis0.requested_state = AXIS_STATE_FULL_CALIBRATION_SEQUENCE
+odrv0.axis0.motor.config.pre_calibrated = True
+odrv0.axis0.encoder.config.pre_calibrated = True
+odrv0.axis0.config.startup_encoder_offset_calibration = True
+odrv0.axis0.config.startup_closed_loop_control = True
+
+odrv0.axis0.config.startup_encoder_index_search = True
+
+
+odrv0.save_configuration()
+odrv0.reboot()
+
+start_liveplotter(lambda:[odrv0.axis0.encoder.pos_estimate, odrv0.axis0.controller.pos_setpoint])
+
+
+1.7 RUN MOTOR
+
+1.7.1 with control mode = pos control and trap traj input
+odrv0.axis0.requested_state = AXIS_STATE_CLOSED_LOOP_CONTROL
+odrv0.axis0.controller.config.control_mode = CONTROL_MODE_POSITION_CONTROL
+odrv0.axis0.controller.config.input_mode = INPUT_MODE_TRAP_TRAJ
+// now motor fixed position, can feel resistance when try to spin manually//
+odrv0.axis0.controller.input_pos = 5
+odrv0.axis0.controller.input_pos = 0  
+
+1.7.2 with control mode = vel control and vel ramp input
+odrv0.axis0.controller.config.control_mode = CONTROL_MODE_VELOCITY_CONTROL
+odrv0.axis0.controller.config.input_mode = INPUT_MODE_VEL_RAMP
+odrv0.axis0.controller.input_vel = 0
+odrv0.axis0.controller.input_vel = 10
+
+
+odrv0.axis0.requested_state = AXIS_STATE_IDLE
+
+/////////////////////////////////////SENSORLESS/////////////////////////////////////////
+
+odrv0.axis0.controller.config.vel_gain = 0.01
+odrv0.axis0.controller.config.vel_integrator_gain = 0.05
+odrv0.axis0.controller.config.control_mode = CONTROL_MODE_VELOCITY_CONTROL
+odrv0.axis0.controller.config.vel_limit = <a value greater than axis.config.sensorless_ramp.vel / (2pi * <pole_pairs>)>
+odrv0.axis0.motor.config.current_lim = 2 * odrv0.axis0.config.sensorless_ramp.current
+odrv0.axis0.sensorless_estimator.config.pm_flux_linkage = 5.51328895422 / (<pole pairs> * <motor kv>)
+odrv0.axis0.motor.config.direction = 1
+odrv0.axis0.requested_state = AXIS_STATE_SENSORLESS_CONTROL
+odrv0.axis0.config.startup_sensorless_control = True
+
+
+//////////////////////////////////////////HALL////////////////////////////////////////////////
+
+
+odrv0.erase_configuration()
+odrv0.config.brake_resistance=0
+odrv0.config.dc_bus_overvoltage_trip_level=26.5
+odrv0.config.dc_bus_undervoltage_trip_level=24.4
+odrv0.config.dc_max_positive_current=30
+odrv0.config.dc_max_negative_current=-3
+odrv0.config.max_regen_current=-3
+
+odrv0.axis0.motor.config.pole_pairs=7
+odrv0.axis0.motor.config.calibration_current=5
+odrv0.axis0.motor.config.resistance_calib_max_voltage=0.53
+odrv0.axis0.motor.config.motor_type=0
+odrv0.axis0.motor.config.current_lim=40
+odrv0.axis0.motor.config.requested_current_range=50
+
+odrv0.axis1.motor.config.pole_pairs=7
+odrv0.axis1.motor.config.calibration_current=5
+odrv0.axis1.motor.config.resistance_calib_max_voltage=0.53
+odrv0.axis1.motor.config.motor_type=0
+odrv0.axis1.motor.config.current_lim=40
+odrv0.axis1.motor.config.requested_current_range=50
+
+odrv0.axis0.encoder.config.mode = ENCODER_MODE_HALL
+odrv0.axis0.encoder.config.cpr = 42
+odrv0.axis0.encoder.config.bandwidth = 100
+odrv0.axis0.config.calibration_lockin.current =5
+odrv0.axis0.config.calibration_lockin.ramp_time =0.4
+odrv0.axis0.config.calibration_lockin.ramp_distance = 3.14159274
+odrv0.axis0.config.calibration_lockin.accel = 20
+odrv0.axis0.config.calibration_lockin.vel = 40
+
+odrv0.axis0.controller.config.control_mode = CONTROL_MODE_POSITION_CONTROL
+odrv0.axis0.controller.config.input_mode = INPUT_MODE_TRAP_TRAJ
+
+odrv0.axis0.trap_traj.config.vel_limit = 30
+odrv0.axis0.trap_traj.config.accel_limit =10
+odrv0.axis0.trap_traj.config.decel_limit = 10
+
+odrv0.axis0.controller.config.input_mode = INPUT_MODE_POS_FILTER
+odrv0.axis0.controller.config.input_filter_bandwidth = 2.0
+
+odrv0.axis0.controller.config.control_mode = CONTROL_MODE_VELOCITY_CONTROL
+odrv0.axis0.controller.config.input_mode = INPUT_MODE_VEL_RAMP
+odrv0.axis0.controller.config.vel_ramp_rate = 300
+odrv0.axis0.controller.config.inertia = 0
+
+odrv0.axis0.controller.config.control_mode = CONTROL_MODE_TORQUE_CONTROL
+odrv0.axis0.controller.config.input_mode = INPUT_MODE_TORQUE_RAMP
+
+odrv0.axis0.motor.config.torque_constant= 8.27/190
+odrv0.axis0.controller.config.torque_ramp_rate = 0.1
+
+odrv0.axis0.controller.config.vel_gain = 0.01
+odrv0.axis0.controller.config.vel_integrator_gain = 0.005
+odrv0.axis0.controller.config.pos_gain = 200
+odrv0.axis0.controller.config.vel_limit = 20
+
+odrv0.axis0.controller.config.pos_gain = 52
+
+odrv0.axis0.motor.config.pre_calibrated = False
+odrv0.axis0.encoder.config.pre_calibrated = False
+odrv0.axis0.config.startup_closed_loop_control = False
+
+odrv0.axis0.requested_state = AXIS_STATE_FULL_CALIBRATION_SEQUENCE
+
+odrv0.axis0.motor.config.pre_calibrated = True
+odrv0.axis0.encoder.config.pre_calibrated = True
+odrv0.axis0.config.startup_closed_loop_control = True
+
+odrv0.axis0.config.can.node_id = 1
+odrv0.axis1.config.can.node_id = 2
+odrv0.can.config.baud_rate = 500000
+
+Odrv0.axis1.motor.config.current_lim = 65
+Odrv0.axis0.controller.config.pos_gain = 48, vel_gain=0.6 ,  vel_integrator_gain=2   0.6 turns
+
+Odrv0.axis0.controller.config.pos_gain = 245.0,  vel_gain=0.47999998927116394 
+vel_integrator_gain=2.5     0.65 turns
+
+odrv0.axis0.controller.config.pos_gain = 200.0
+odrv0.axis0.controller.config.vel_integrator_gain  = (0.5 * 10 * 0.32/2 )*10
+odrv0.axis0.controller.start_anticogging_calibration()
+# Wait until odrv0.axis0.controller.config.anticogging.calib_anticogging == False
+odrv0.axis0.controller.config.anticogging.pre_calibrated = True
+odrv0.save_configuration()
+
+odrv0.axis1.controller.config.control_mode = CONTROL_MODE_VELOCITY_CONTROL
+odrv0.axis1.controller.config.input_mode = INPUT_MODE_VEL_RAMP
+odrv0.axis0.controller.config.control_mode = CONTROL_MODE_VELOCITY_CONTROL
+odrv0.axis0.controller.config.input_mode = INPUT_MODE_VEL_RAMP
+odrv0.axis1.controller.input_vel = 5
+odrv0.axis0.controller.input_vel = 5
+
+odrv0.save_configuration()
+odrv0.axis0.config.general_lockin.current
+odrv0.axis0.config.calibration_lockin.current
+
+1.7 RUN MOTOR
+1.7.1 with control mode = pos control and trap traj input
+odrv0.axis1.controller.input_pos = 5
+odrv0.axis1.controller.input_pos = 0  
+// now motor fixed position, can feel resistance when try to spin manually//
+odrv0.axis1.requested_state = AXIS_STATE_IDLE
+// now motor free
+
+
+odrv0.axis1.controller.input_vel = 5
+odrv0.axis1.controller.input_vel = 0  
+
+odrivetool liveplotter
+start_liveplotter(lambda:[odrv0.axis1.encoder.pos_estimate, odrv0.axis1.controller.pos_setpoint])
+
+// for graph //
+
+odrv0.axis1.motor.config.torque_lim = 2
+
+Set motor direction: odrv0.axis1.motor.config.direction = +1 OR -1
+odrv0.erase_configuration()
+odrv0.axis1.encoder.config.calib_range =0.05
+odrv0.axis1.encoder.config.pre_calibrated = True
+
+odrv0.axis1.encoder.config.use_index = False
+
+odrv0.axis1.encoder.config.pre_calibrated
+
+odrv0.axis1.controller.config.vel_limit = 10000
+
+pos_gain=120
+bandwidth = 2100
+
+------------------------------testing handbrake feature---------------
+
+odrv0.axis1.controller.input_pos = odrv0.axis1.encoder.pos_estimate
+
+odrv0.axis1.controller.config.input_mode = INPUT_MODE_PASSTHROUGH
+odrv0.axis1.controller.config.control_mode = CONTROL_MODE_POSITION_CONTROL
+
+odrv0.axis1.controller.input_pos = odrv0.axis1.encoder.pos_estimate
+
+odrv0.axis1.controller.config.control_mode = CONTROL_MODE_VELOCITY_CONTROL
+odrv0.axis1.controller.config.input_mode = INPUT_MODE_VEL_RAMP
+odrv0.axis1.controller.input_vel = 5
+
+
+odrv0.axis1.controller.input_vel = 0
+
+----------------------------------------Absolute-------------------
+odrv0.config.dc_max_negative_current=-0.01
+odrv0.axis1.motor.config.torque_constant= 8.27/190, original being 8.23/190
+
+odrv0.axis1.controller.config.vel_gain = 0.16
+odrv0.axis1.controller.config.pos_gain = 20.0
+odrv0.axis1.controller.config.vel_integrator_gain = 0.32
+
+odrv0.config.brake_resistance = 2
+odrv0.axis1.encoder.config.pre_calibrated = True
+
+NOTESSSSS
+HEARTBEAT MSG WITH SMALLER STDID WILL BE TRANSMITTED FIRST
+
+Black  White     Grey     Purple 	Blue
+GND    5V        A          B     		Z
+
+
+
