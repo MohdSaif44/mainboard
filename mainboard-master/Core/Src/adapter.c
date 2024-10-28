@@ -87,7 +87,7 @@ void Initialize() {
 //	GPIOPinsInit (IP8_Analog2_PIN, GPIO_MODE_INPUT,GPIO_SPEED_FREQ_MEDIUM, GPIO_PULLUP);
 #endif
 //	MUXInit(&MUX, MUX1_INPUT_PIN, MUX1_S0_PIN, MUX1_S1_PIN, MUX1_S2_PIN);
-//	SHIFTREGInit(&SR, CASCADE_1, SR_SCK_PIN, SR_RCK_PIN, SR_SI_PIN);
+	SHIFTREGInit(&SR, CASCADE_1, SR_SCK_PIN, SR_RCK_PIN, SR_SI_PIN);
 //	GPIOPinsInit(IP16_Analog1_PIN, GPIO_MODE_IT_RISING_FALLING, GPIO_SPEED_FREQ_HIGH,GPIO_NOPULL);
 //	GPIOPinsInit(IP17_Analog2_PIN, GPIO_MODE_IT_RISING_FALLING, GPIO_SPEED_FREQ_HIGH,GPIO_NOPULL);
 //	GPIOPinsInit(IP18_Analog3_PIN, GPIO_MODE_IT_RISING_FALLING, GPIO_SPEED_FREQ_HIGH,GPIO_NOPULL);
@@ -119,8 +119,8 @@ void Initialize() {
 //	QEIInit(&htim4);	//Y
 //	QEIInit(&htim8);
 
-	CANxInit(&hcan1, CAN_FILTER_FIFO0, CAN_FILTERSCALE_32BIT, 0, 0, 10, CAN_1MHz);// RNS, 3 vesc, 1 robomaster
-	CANxInit(&hcan2, CAN_FILTER_FIFO1, CAN_FILTERSCALE_32BIT, 0, 0, 14, CAN_1MHz);// 5 vesc
+	CANxInit(&hcan1, CAN_FILTER_FIFO0, CAN_FILTERSCALE_32BIT, 0, 0, 10, CAN_500KHz);	// RNS & VESC
+	CANxInit(&hcan2, CAN_FILTER_FIFO1, CAN_FILTERSCALE_32BIT, 0, 0, 14, CAN_1MHz);
 
 //	PWMTimeBaseInit(&htim1, 65355, 75); // allignment enc
 //	PWMChannelConfig(&htim1, TIM_CHANNEL_1, TIM1_CHANNEL1_PIN);
@@ -128,21 +128,21 @@ void Initialize() {
 //	PWMChannelConfig(&htim1, TIM_CHANNEL_3, IP2_PIN);
 //	PWMChannelConfig(&htim1, TIM_CHANNEL_4, IP3_PIN);
 //
-//	PWMTimeBaseInit(&htim3, 20000, 84);
+	PWMTimeBaseInit(&htim3, 20000, 84);
 //	PWMChannelConfig(&htim3, TIM_CHANNEL_2, IP14_PIN); // IP14
-//	PWMChannelConfig(&htim3, TIM_CHANNEL_3, TIM3_CHANNEL3_PIN); // hspm2
-//	PWMChannelConfig(&htim3, TIM_CHANNEL_4, TIM3_CHANNEL4_PIN); // hspm1
-//
-//	PWMTimeBaseInit(&htim5, 20000, 84);
-//	PWMChannelConfig(&htim5, TIM_CHANNEL_1, TIM5_CHANNEL1_PIN); // hspm8
-//	PWMChannelConfig(&htim5, TIM_CHANNEL_2, TIM5_CHANNEL2_PIN); // hspm7
-//	PWMChannelConfig(&htim5, TIM_CHANNEL_3, TIM5_CHANNEL3_PIN); // hspm6
-//	PWMChannelConfig(&htim5, TIM_CHANNEL_4, TIM5_CHANNEL4_PIN); // hspm5
-//
-//	PWMTimeBaseInit(&htim9, 20000, 168);
-//	PWMChannelConfig(&htim9, TIM_CHANNEL_1, TIM9_CHANNEL1_PIN); // hspm4
-//	PWMChannelConfig(&htim9, TIM_CHANNEL_2, TIM9_CHANNEL2_PIN); // hspm3
-//
+	PWMChannelConfig(&htim3, TIM_CHANNEL_3, TIM3_CHANNEL3_PIN); // hspm2
+	PWMChannelConfig(&htim3, TIM_CHANNEL_4, TIM3_CHANNEL4_PIN); // hspm1
+
+	PWMTimeBaseInit(&htim5, 20000, 84);
+	PWMChannelConfig(&htim5, TIM_CHANNEL_1, TIM5_CHANNEL1_PIN); // hspm8
+	PWMChannelConfig(&htim5, TIM_CHANNEL_2, TIM5_CHANNEL2_PIN); // hspm7
+	PWMChannelConfig(&htim5, TIM_CHANNEL_3, TIM5_CHANNEL3_PIN); // hspm6
+	PWMChannelConfig(&htim5, TIM_CHANNEL_4, TIM5_CHANNEL4_PIN); // hspm5
+
+	PWMTimeBaseInit(&htim9, 20000, 168);
+	PWMChannelConfig(&htim9, TIM_CHANNEL_1, TIM9_CHANNEL1_PIN); // hspm4
+	PWMChannelConfig(&htim9, TIM_CHANNEL_2, TIM9_CHANNEL2_PIN); // hspm3
+
 //	PWMTimeBaseInit(&htim12, 20000, 84);
 //	PWMChannelConfig(&htim12, TIM_CHANNEL_1, IP5_PIN);
 //	PWMChannelConfig(&htim12, TIM_CHANNEL_2, IP6_PIN);
@@ -230,23 +230,23 @@ void CAN_PROCESS(PACKET_t packet_src) {
 
 		break;
 
-//	case RNS_PACKET:
-//		if (insData_receive[0] == 1) {
-//			rns.RNS_data.common_instruction = insData_receive[1];
-//			insData_receive[0] = 2;
-//		}
-//		if (insData_receive[0] == 17) {
-//			if (buf2_flag == 1) {
-//				rns.RNS_data.common_instruction = insData_receive[1];
-//				rns.RNS_data.common_buffer[0].data = buf1_receive[0].data;
-//				rns.RNS_data.common_buffer[1].data = buf1_receive[1].data;
-//				rns.RNS_data.common_buffer[2].data = buf2_receive[0].data;
-//				rns.RNS_data.common_buffer[3].data = buf2_receive[1].data;
-//				insData_receive[0] = 3;
-//			}
-//		}
-//
-//		break;
+	case RNS_PACKET:
+		if (insData_receive[0] == 1) {
+			rns.RNS_data.common_instruction = insData_receive[1];
+			insData_receive[0] = 2;
+		}
+		if (insData_receive[0] == 17) {
+			if (buf2_flag == 1) {
+				rns.RNS_data.common_instruction = insData_receive[1];
+				rns.RNS_data.common_buffer[0].data = buf1_receive[0].data;
+				rns.RNS_data.common_buffer[1].data = buf1_receive[1].data;
+				rns.RNS_data.common_buffer[2].data = buf2_receive[0].data;
+				rns.RNS_data.common_buffer[3].data = buf2_receive[1].data;
+				insData_receive[0] = 3;
+			}
+		}
+
+		break;
 
 	case RBMS_PACKET:
 		break;
@@ -297,7 +297,7 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan) {
 			}
 
 			if((CAN1RxMessage.StdId & 0x10) == 0x10){
-				led5 = !led5;
+//				led5 = !led5;
 				if (J60_CANHandler(&CAN1RxMessage, aData)) {
 					source = DEEP_PACKET;
 				}
@@ -411,6 +411,7 @@ void HAL_CAN_RxFifo1MsgPendingCallback(CAN_HandleTypeDef *hcan) {
 			if (source != ODRIVE_PACKET && source != RBMS_PACKET){
 			source = RNS_PACKET;
 				switch (CAN1RxMessage.StdId) {
+				led2 = !led2;
 				case RNS_TO_mainboard:
 					memcpy(&insData_receive, &aData, CAN1RxMessage.DLC);
 					buf2_flag = 0;
@@ -470,13 +471,13 @@ void HAL_CAN_RxFifo1MsgPendingCallback(CAN_HandleTypeDef *hcan) {
 			}
 			if (CAN2RxMessage.StdId >= 0x201 && CAN2RxMessage.StdId <= 0x208){
 				RBMS_CAN_Handler(&CAN2RxMessage, aData);
-				led6 = !led6;
+//				led6 = !led6;
 				source = RBMS_PACKET;
 			}
 			if (source != ODRIVE_PACKET && source != RBMS_PACKET) {
 				source = RNS_PACKET;
 				switch (CAN2RxMessage.StdId) {
-//				led2 = !led2;
+				led2 = !led2;
 				case RNS_TO_mainboard:
 					memcpy(&insData_receive, &aData, CAN2RxMessage.DLC);
 					buf2_flag = 0;
