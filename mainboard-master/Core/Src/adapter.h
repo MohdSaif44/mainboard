@@ -16,7 +16,7 @@
 #ifndef SRC_ADAPTER_H_
 #define SRC_ADAPTER_H_
 
-#define mainboard3_3
+//#define mainboard3_3
 
 /* Private variables ---------------------------------------------------------*/
 

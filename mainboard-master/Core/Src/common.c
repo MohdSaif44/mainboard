@@ -11,7 +11,7 @@ void set(void) {
 
 	sys.flag16=0;
 //	KalmanFilter_Init(&enc1.Angle, &Filtered_Angle, 1.0, 1.0, 0.001, 1.0, 1.0, &KF);
-//	watchdoginit(4, 4);   // use the watchdog refresh inside 5ms loop
+	watchdoginit(4, 4);   // use the watchdog refresh inside 5ms loop
 	Initialize();
 	PSxSlaveInit(&ps4, &hi2c1);
 //	PMW3901_SlaveInit(&enc, &hi2c2);
@@ -19,8 +19,9 @@ void set(void) {
 //	TIMxInit(&htim6, 50, 84);			// 50us use for SoftPWM
 	TIMxInit(&htim7, 5000, 84);			// 5ms
 	TIMxInit(&htim9, 65535, 74);
-	RNS_config(&hcan1);
-//	ExtixInit(GPIO_PIN_0, 9, 0,&ExtiPin);
+//	RNS_config(&hcan1);
+	ExtixInit(GPIO_PIN_0, 9, 0,&ExtiPin);
+	ExtixInit(GPIO_PIN_1, 9, 1,&ExtiPin);
 	MODNRobotBaseVelInit(MODN_FWD_OMNI, 0.47, 0.47, &modn);
 	MODNRobotConInit(&x_vel, &y_vel, &w_vel, &modn);
 	MODNWheelVelInit(&v1, &v2, &v3, &v4, &modn);
