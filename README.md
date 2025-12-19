@@ -6,7 +6,7 @@ This project involves the development of a high-precision control system origina
 The core focus lies in the implementation of advanced kinematic algorithms and trajectory planning to ensure smooth, precise motion. To handle rapid dynamics and ensure hardware longevity, the system integrates robust safety features including active torque monitoring and joint limit enforcement.
 
 <p align="center">
-  <img src="prototype.jpeg" alt="Jumping Joint Prototype" width="300"/>
+  <img src="prototype.jpeg" alt="Jumping Joint Prototype" width="500"/>
   <br>
   <em>Figure 1: Jumping Joint Prototype.</em>
 </p>
