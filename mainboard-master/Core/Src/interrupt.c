@@ -396,7 +396,7 @@ void EXTI0_IRQHandler(void) {
 }
 void EXTI1_IRQHandler(void) {
 
-//	PWMEncoder_Angle(&htim1, GPIOC, GPIO_PIN_1, &enc2);
+	PWMEncoder_Angle(&htim1, GPIOC, GPIO_PIN_1, &enc2);
 	HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_1);
 
 }

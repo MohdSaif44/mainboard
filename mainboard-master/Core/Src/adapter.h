@@ -16,7 +16,7 @@
 #ifndef SRC_ADAPTER_H_
 #define SRC_ADAPTER_H_
 
-#define mainboard3_3
+//#define mainboard3_3
 
 /* Private variables ---------------------------------------------------------*/
 
@@ -43,7 +43,6 @@ extern "C" {
 #include "VESC_CAN/vesc_interface.h"
 #include "IMU/r6091u.h"
 #include "Odrive/odriver.h"
-#include "iwdg.h"
 #include "Robomaster/Robomaster.h"
 #include "PathProfile/PathProfile.h"
 #include "SoftPWM/SoftPWM.h"
@@ -64,7 +63,8 @@ extern "C" {
 // #include "Dongbei/dongbei.h"
 // #include "RGB/rgb.h"
 // #include "TFmini/tfmini.h"
- #include "Faulhaber/FH.h"
+#include "Faulhaber/FH.h"
+#include "trajectory_control/traj.h"
 // #include "PixyCam2_Esp32/PixyCam2_ESP32.h"
 
 /* Exported functions prototypes ---------------------------------------------*/
